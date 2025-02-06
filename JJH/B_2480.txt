@@ -18,7 +18,7 @@ public class Main {
 		Arrays.sort(numArray);
 		
 		
-		if(numArray[0] == numArray[1] && numArray[1] == numArray[2]) { // 다 같으면
+		if(numArray[0] == numArray[1] && numArray[1] == numArray[2]) { 
 			sum = 10000 + numArray[0]*1000;
 		}
 		else if(numArray[0] != numArray[1] && numArray[1] != numArray[2] && numArray[2] != numArray[0]) { // 다 다르면
