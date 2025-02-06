@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class StudyEx1 {
-	public void game(BufferedReader br) throws NumberFormatException, IOException {
+	public void game(BufferedReader br) {
 		int count = 0;
 		int num = 0;
 		System.out.println("총 10개의 문제가 출제됩니다.");
@@ -16,16 +16,21 @@ public class StudyEx1 {
 		     int answer = a+b;
 			
 		     System.out.println("["+num+"] "+a+" + "+b+" = ");
-		     int input = Integer.parseInt(br.readLine());
-			
-		     if(input==answer) {
-			    count++;
-			    System.out.println("정답입니다! 정답 개수 : "+count+"개");
-		     }
-		     else
-		     {
-			    System.out.println("틀렸습니다.ㅠㅠ 정답은 : "+answer+"입니다.");
-		     }
+		     int input;
+			 try {
+				    input = Integer.parseInt(br.readLine());
+				
+				    if(input==answer) {
+				       count++;
+				       System.out.println("정답입니다! 정답 개수 : "+count+"개");
+			         }
+			         else{
+				        System.out.println("틀렸습니다.ㅠㅠ 정답은 : "+answer+"입니다.");
+			         }	
+			      } catch (NumberFormatException | IOException e) {
+                         System.out.println("잘못된 입력입니다. 숫자를 입력해주세요.");
+                         num--;
+                }    
 		 }while(num<10);
 		 System.out.println("모든 문제를 풀었습니다.\n정답 개수 : "+count+"\n점수 : "+count*10);
 	}
@@ -35,7 +40,6 @@ public class StudyEx1 {
 		char key = 0;
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
 		
 			boolean exe = true;
 			while(exe) {
@@ -57,5 +61,4 @@ public class StudyEx1 {
 					System.out.println("잘못된 입력입니다. 다시 입력해주세요.\n");
 			}
 	}
-
 }
