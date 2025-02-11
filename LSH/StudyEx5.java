@@ -13,9 +13,9 @@ public class ArrayEx5 {
 			for(int j=0; j<m[i].length ;j++) {
 	 		if(i==mid)
 				m[i][j] = ++cnt;
-			else if(((i+j)>=mid) && ((j-i)<=mid) && i<mid)
+			else if((i+j)>=mid && (j-i)<=mid && i<mid)
 				m[i][j] = ++cnt;
-			else if(((i-j)<=mid) && (i+j)<=(mid*3) && i>(mid))
+			else if((i-j)<=mid && (i+j)<=(mid*3) && i>(mid))
 				m[i][j] = ++cnt;
 			}
 		}
