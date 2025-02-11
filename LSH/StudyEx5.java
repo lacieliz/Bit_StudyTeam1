@@ -11,7 +11,7 @@ public class ArrayEx5 {
 		for(int i=0; i<m.length; i++) {
 			for(int j=0; j<m[i].length ;j++) {
 
-	 		if(i==SIZE/2 || j==SIZE/2)
+	 		if(i==SIZE/2)
 					m[i][j] = ++cnt;
 				else if(((i+j)>=(SIZE/2)) && ((j-i)<=(SIZE/2)) && i<(SIZE/2))
 					m[i][j] = ++cnt;
