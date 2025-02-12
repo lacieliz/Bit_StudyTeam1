@@ -2,8 +2,6 @@ package java09;
 class Car{
 	protected String name;
 	protected String fuel;
-	protected int ton;
-	protected int line;
 	
 	public String getName() {
 		return name;
@@ -11,25 +9,27 @@ class Car{
 	public String getFuel() {
 		return fuel;
 	}
-	public int getCarry() {
-		return ton;
-	}
-	public int getNumber() {
-		return line;
-	}
 }
 class Truck extends Car{
+	protected int ton;
 	public Truck(String name, String fuel, int ton) {
 		this.name=name;
 		this.fuel=fuel;
 		this.ton=ton;
 	}
+	public int getCarry() {
+		return ton;
+	}
 }
 class Bus extends Car{
+	protected int line;
 	public Bus(String name, String fuel, int line) {
 		this.name=name;
 		this.fuel=fuel;
 		this.line=line;
+	}
+	public int getNumber() {
+		return line;
 	}
 }
 class Bike extends Car{
