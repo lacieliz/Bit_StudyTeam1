@@ -173,6 +173,7 @@ public void DelAddr(BufferedReader br, Vector<MyAddress> mapname) throws IOExcep
 	}
 	
 	if(index.size()>=2) {
+		System.out.print("핸드폰 번호 입력 :");
 		String phone = br.readLine(); 
 		for(j=0; j<index.size();j++) {
 			if(phone.equals(mapname.get(index.get(j)).getTel())) {
