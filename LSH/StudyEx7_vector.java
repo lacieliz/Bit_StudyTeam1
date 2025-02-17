@@ -3,12 +3,12 @@ package java11;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.Vector;
 
-class MyAddress{
-	private String name;
+class MyAddress{ //Bean Class 콩 바구니 용도 디비로 가면 DTO라고 한다.(Data Type Object)
+	private String name; //DB랑 연동할 때는 디비에 저장하는 순서대로 변수를 써야한다.
 	private int age;
 	private String tel;
 	private String address;
@@ -42,12 +42,12 @@ class MyAddress{
 
 }
 class AddrFunction extends MyAddress{
-	public void AddAddr(BufferedReader br,  Map<String,MyAddress> mapname) throws IOException {
+	public void AddAddr(BufferedReader br,  Vector<MyAddress> mapname) throws IOException {
 		System.out.println("1. 주소록 저장");
 		
 		System.out.print("이름 : ");
+		mapname.add(this);
 		setName(br.readLine());
-		mapname.put(getName(), this);
 		
 		System.out.print("나이 : ");
 		setAge(Integer.parseInt(br.readLine()));
@@ -58,35 +58,52 @@ class AddrFunction extends MyAddress{
 		System.out.print("주소 : ");
 		setAddress(br.readLine());
 	}
-	public void SearchAddr(BufferedReader br, Map<String,MyAddress> mapname) throws IOException {
+	public void SearchAddr(BufferedReader br, Vector<MyAddress> mapname) throws IOException {
 		System.out.print("검색 이름 : ");
 		String userName = br.readLine();
-		
-		if(mapname.get(userName) != null) {
-			Iterator<String> it = mapname.keySet().iterator();
-			
-			while(it.hasNext() && userName.equals(it.next())) {
-			System.out.print("이름 : ");
-			System.out.println(mapname.get(userName).getName());
+		Iterator<MyAddress> it = mapname.iterator();
 
-			System.out.print("나이 : ");
-			System.out.println(mapname.get(userName).getAge());
+		if(it.hasNext()) {
 			
-			System.out.print("전화번호 : ");
-			System.out.println(mapname.get(userName).getTel());
-			
-			System.out.print("주소 : ");
-			System.out.println(mapname.get(userName).getAddress());
-			System.out.println();
+			MyAddress temp = null;
+			System.out.println("========리스트=========");
+
+			while(it.hasNext())
+			{
+				temp = it.next();
+				if(userName.equals(temp.getName())) {
+				System.out.print("이름 : ");
+				System.out.println(temp.getName());
+				
+				System.out.print("나이 : ");
+				System.out.println(temp.getAge());
+				
+				System.out.print("전화번호 : ");
+				System.out.println(temp.getTel());
+				
+				System.out.print("주소 : ");
+				System.out.println(temp.getAddress());
+				System.out.println();
+
+			}
+				System.out.println("======================");
+
 			}
 		} 
 		else
 			System.out.println("\""+userName+"\" 님은 목록에 없습니다.");
 		
 	}
-	public void EditAddr(BufferedReader br, Map<String,MyAddress> mapname) throws IOException{
+	public void EditAddr(BufferedReader br, Vector<MyAddress> mapname) throws IOException{
 		System.out.print("수정하려는 목록의 이름 : ");
 		String userName = br.readLine();
+		int userIndex  = 0;
+		for(int i=0; i<mapname.size();i++) {
+			if(userName == mapname.get(i).getName()) {
+				userIndex = i;
+				break;
+			}
+		}
 		
 		System.out.println("1.나이를 수정하시겠습니까?");
 		System.out.println("2.전화번호를 수정하시겠습니까?");
@@ -97,19 +114,19 @@ class AddrFunction extends MyAddress{
 		switch(userInput) {
 		case 1: {
 			System.out.print("나이를 입력해주세요.");
-			mapname.get(userName).setAge(Integer.parseInt(br.readLine()));
+			mapname.get(userIndex).setAge(Integer.parseInt(br.readLine()));
 			System.out.println("성공적으로 수정했습니다.");
 			break;
 		}
 		case 2: {
 			System.out.print("전화번호를 입력해주세요.");
-			mapname.get(userName).setTel(br.readLine());
+			mapname.get(userIndex).setTel(br.readLine());
 			System.out.println("성공적으로 수정했습니다.");
 			break;
 		}
 		case 3: {
 			System.out.print("주소를 입력해주세요.");
-			mapname.get(userName).setAddress(br.readLine());
+			mapname.get(userIndex).setAddress(br.readLine());
 			System.out.println("성공적으로 수정했습니다.");
 			break;
 			}
@@ -120,52 +137,80 @@ class AddrFunction extends MyAddress{
 		}
 	}
 
-public void ShowAddrList( Map<String,MyAddress> mapname) {
+public void ShowAddrList( Vector<MyAddress> mapname) {
 	
 	System.out.println("4.전체보기");
+	System.out.println("========전체 보기=========");
 
-	Iterator<String> it = mapname.keySet().iterator();
+	Iterator<MyAddress> it = mapname.iterator();
+	
 	while(it.hasNext()) {
 		//mapname.containsKey(it.next());
-		String key = it.next();
+		MyAddress temp = it.next();
+		System.out.println("이름: " + temp.getName());
+		System.out.println("나이: " + temp.getAge());
+		System.out.println("전화번호: " + temp.getTel());
+		System.out.println("주소: " + temp.getAddress());
 		System.out.println();
-		System.out.println("이름: " + mapname.get(key).getName());
-		System.out.println("나이: " + mapname.get(key).getAge());
-		System.out.println("전화번호: " + mapname.get(key).getTel());
-		System.out.println("주소: " + mapname.get(key).getAddress());
-		System.out.println();
+
 	}	
+	System.out.println("========================");
 }
 
-public void DelAddr(BufferedReader br, Map<String,MyAddress> mapname) throws IOException {
+public void DelAddr(BufferedReader br, Vector<MyAddress> mapname) throws IOException {
 	
 	System.out.println("5.주소록 삭제");
 	
 	System.out.print("삭제할 주소 이름 입력");
 	String s = br.readLine();
-	
-	if(!mapname.containsKey(s)) {
-		System.out.println("없는 이름입니다.");
-		System.out.println("메인화면으로 돌아갑니다.");
+	ArrayList<Integer> index = new ArrayList<>();
+	int j=0;
+	//동명이인 찾기
+	for(int i=0; i<mapname.size();i++) {
+		if(s.equals(mapname.get(i).getName())) {
+			index.add(i);
+		}
 	}
 	
-	System.out.println("\""+s+"\" 님을 정말 삭제하시겠습니가?");
-	System.out.print("입력(Y or N) : ");
-	String userInput = br.readLine();
-
-	if((userInput.equals("Y") || userInput.equals("y")) && mapname.containsKey(s)) {
-		mapname.remove(s);
-		System.out.println("\""+s+"\" 님이 삭제되었습니다.");
+	if(index.size()>=2) {
+		System.out.print("핸드폰 번호 입력 :");
+		String phone = br.readLine(); 
+		for(j=0; j<index.size();j++) {
+			if(phone.equals(mapname.get(index.get(j)).getTel())) {
+				System.out.println("\""+s+"\" 님을 정말 삭제하시겠습니가?");
+				System.out.print("입력(Y or N) : ");
+				String userInput = br.readLine();
+				
+				if((userInput.equals("Y") || userInput.equals("y"))) {
+					int temp = index.get(j);
+					mapname.remove(temp);
+					System.out.println("\""+s+"\" 님이 삭제되었습니다.");
+					break;
+				}
+				else
+				{
+					System.out.println("취소하셨습니다.");
+					break;
+				}
+			}
+		}
 	}
-	else
-	{
-		System.out.println("없는 이름입니다.");
-		System.out.println("메인화면으로 돌아갑니다.");
+	else {
+		System.out.println("\""+s+"\" 님을 정말 삭제하시겠습니가?");
+		System.out.print("입력(Y or N) : ");
+		String userInput = br.readLine();
+		int temp = index.get(0);
+		if((userInput.equals("Y") || userInput.equals("y"))) {
+			mapname.remove(temp);
+			System.out.println("\""+s+"\" 님이 삭제되었습니다.");
+		}
+		else
+		{
+			System.out.println("취소하셨습니다.");
+		}
 	}
-	
 }
 }
-
 class MakeMenu{
 	public void printMenu() {
 		System.out.println("1. 주소록 저장");
@@ -190,7 +235,7 @@ class MakeMenu{
 	}
 	
 	public void selectMenu(int userInput, BufferedReader br, 
-			               AddrFunction exe, Map<String,MyAddress>mapname) 
+			               AddrFunction exe, Vector<MyAddress>mapname) 
 			            		   throws IOException {
 		switch(userInput) {
 		
@@ -225,10 +270,13 @@ class MakeMenu{
 	}
 
 }
-public class AddressBookStudy {
+public class AddressBookStudy_Vector {
+	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
 	public static void main(String[] args) {		
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		Map<String,MyAddress>mapname = new HashMap<>();
+		//Map<String,MyAddress>mapname = new HashMap<>(); 
+		//동명이인 저장이 안된다.
+		Vector<MyAddress> mapname = new Vector<>();
 		AddrFunction exe = new AddrFunction();
 		MakeMenu menu = new MakeMenu();
 		int userInput =1 ;
@@ -247,6 +295,7 @@ public class AddressBookStudy {
 			System.out.println("다시 입력해주세요.");
 		}
 	}
+	}
 }
-}
+
 
