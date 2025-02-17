@@ -3,6 +3,7 @@ package java11;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -162,17 +163,49 @@ public void DelAddr(BufferedReader br, Vector<MyAddress> mapname) throws IOExcep
 	
 	System.out.print("삭제할 주소 이름 입력");
 	String s = br.readLine();
-	
+	ArrayList<Integer> index = new ArrayList<>();
+	int j=0;
+	//동명이인 찾기
 	for(int i=0; i<mapname.size();i++) {
-		if(s.equals(mapname.get(i).getName())){
-			System.out.println("\""+s+"\" 님을 정말 삭제하시겠습니가?");
-			System.out.print("입력(Y or N) : ");
-			String userInput = br.readLine();
-			
-			if((userInput.equals("Y") || userInput.equals("y"))) {
-				mapname.remove(i);
-				System.out.println("\""+s+"\" 님이 삭제되었습니다.");
+		if(s.equals(mapname.get(i).getName())) {
+			index.add(i);
+		}
+	}
+	
+	if(index.size()>=2) {
+		String phone = br.readLine(); 
+		for(j=0; j<index.size();j++) {
+			if(phone.equals(mapname.get(index.get(j)).getTel())) {
+				System.out.println("\""+s+"\" 님을 정말 삭제하시겠습니가?");
+				System.out.print("입력(Y or N) : ");
+				String userInput = br.readLine();
+				
+				if((userInput.equals("Y") || userInput.equals("y"))) {
+					int temp = index.get(j);
+					mapname.remove(temp);
+					System.out.println("\""+s+"\" 님이 삭제되었습니다.");
+					break;
+				}
+				else
+				{
+					System.out.println("취소하셨습니다.");
+					break;
+				}
 			}
+		}
+	}
+	else {
+		System.out.println("\""+s+"\" 님을 정말 삭제하시겠습니가?");
+		System.out.print("입력(Y or N) : ");
+		String userInput = br.readLine();
+		int temp = index.get(0);
+		if((userInput.equals("Y") || userInput.equals("y"))) {
+			mapname.remove(temp);
+			System.out.println("\""+s+"\" 님이 삭제되었습니다.");
+		}
+		else
+		{
+			System.out.println("취소하셨습니다.");
 		}
 	}
 }
