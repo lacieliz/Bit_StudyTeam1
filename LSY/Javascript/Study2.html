@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title> 과제 </title>
+		<script type="text/javascript">
+			//<!-- 
+			document.write( "<h2> 마름모 </h2>" );
+			/* 2차원 배열 */
+			// let m = [][];	에러 발생
+			let SIZE=11;
+			let arr = [];
+			let cnt=0;
+			let a;
+			
+			for( let i=0; i<SIZE; i++ ) {
+				arr[i] = [];
+				for( let j=0; j<SIZE; j++ ) {
+					a = Math.abs( parseInt(SIZE/2) - i );
+					if( j >= a && j < SIZE-a ) {
+						arr[i][j] = ++cnt;
+					} else arr[i][j] = 0;
+				}
+			}
+			// -->
+		</script>
+	</head>
+	<body>
+		<link rel="stylesheet" href="study2Style.css">
+		<table>
+			<script>
+				for( let i=0; i<arr.length; i++ ) {
+					document.write( "<tr>" );
+					for( let j=0; j<arr[i].length; j++ ) {
+						document.write( "<td>" + arr[i][j] +"</td>");
+					}
+					document.write( "</tr>" );
+				}
+			</script>
+		</table>
+
+	</body>
+</html>
