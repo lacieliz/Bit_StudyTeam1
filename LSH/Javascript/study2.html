@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title> 과제 </title>
+		<script type="text/javascript">
+			document.write( "<h2> 마름모 </h2>" );
+
+			document.write("<table border='1'>");
+			const SIZE = 11
+			const half_SIZE = parseInt(SIZE/2);
+			var min = parseInt(SIZE/2);
+			var max = parseInt(SIZE/2);
+			var num = 1;
+
+				for(var i=0; i<SIZE; i++){
+
+					document.write("<tr>");
+
+					for(var j=0; j<SIZE; j++){
+							if(j>=min && j<=max)  //  min<= j <=max
+								document.write("<td id='a'>"+(num++)+"\u00a0 </td>");
+
+							else
+						        document.write("<td id='a'>\u00a0\u00a0\u00a0\u00a0 </td>");
+					}
+					if(i<half_SIZE){
+				    	min=min-1;
+					    max=max+1;
+					}
+					else{
+						min=min+1;
+						max=max-1;
+					}
+					document.write("</tr>");
+				}
+				document.write("</table>");
+		</script>		
+	</head>
+	<body>
+	</body>
+</html>

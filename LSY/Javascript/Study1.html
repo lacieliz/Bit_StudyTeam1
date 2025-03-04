@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title> 과제 </title>
+		<script type="text/javascript">
+			//<!-- 
+			document.write( "<h2> 구구단 </h2>" );
+			// -->
+		</script>
+	</head>
+	<body>
+		<table border="1">
+			<script>
+			let dan=9;
+			let i;
+			let j;
+			for( i=2; i<=dan; i++ ) {
+				document.write( "<th>" + i + "단" + "&nbsp" + "</th>");
+			}
+			for( i=1; i<=dan; i++ ) {
+				document.write( "<tr>" );				// 문자열로 인식이 안되는건가?
+				for( j=2; j<=dan; j++ ) {
+					document.write( "<td>" + j + " * " + i + " = " + j*i + "</td>" );
+				}
+				document.write( "<tr>" );				// document.write( "<br>" ); 이렇게 쓰면 h2 구구단과 table의 거리가 한참 멀어짐.
+			}
+			</script>
+		</table>
+	</body>
+</html>

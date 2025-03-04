@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title> 과제 </title>
+		<script type="text/javascript">
+			document.write( "<h2> 마름모 </h2>" );
+			/* 2차원 배열 */
+			// let m = [][];		에러 발생	
+			let m = [];
+            var num = 0;
+            const SIZE = 11;
+            const half_SIZE = parseInt(SIZE/2);
+            let min = half_SIZE;
+            let max = half_SIZE;
+
+            for(var i = 0; i < SIZE; i++) //2차원 배열 만들기
+                m[i]=[];
+            /////////////////////////////////////////////////////////////////////
+            //2차원 배열에 숫자값 넣기
+            for(i=0;i<11;i++){
+               for(var j = min; j <=max; j++){ // min<= j <= max
+                   m[i][j] = ++num ;
+               }
+               if(i<half_SIZE){
+                min--;
+                max++;
+               }
+               else{
+                min++;
+                max--;            
+               }
+           }
+           ////////////////////////////////////////////////////////////////////
+           //마름모 테이블 출력하기
+           document.write("<table border ='1'>");
+
+           for(i=0 ; i < 11 ; i++){
+                document.write("<tr>");
+                for(j = 0; j < 11; j++){
+                    if(m[i][j]!=null)
+                       document.write("<td>"+m[i][j]+"</td>");
+                    else
+                       document.write("<td>   </td>");
+                }
+                document.write("</tr>");
+           }
+           document.write("</table>");
+			</script>
+    </head>
+    <body>
+
+    </body>
+</html>
