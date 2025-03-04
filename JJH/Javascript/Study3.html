@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>로또</title>
+<script type="text/javascript">
+//<!--
+document.write( "<h2> Random Lotto </h2>");
+/*
+ 	로또 조합(1~45까지 숫자 6개)을 10개 추출 (배열로 중복제거)
+ 	중복을 100% 제거
+ 	오름차순 정렬해서 출력
+ */
+ 	let lotto = [];
+ 	let sortLotto = [];
+ 	
+ 	for(let i = 0 ; i < 10 ; i++){
+ 		lotto[i] = new Set();
+ 		while(lotto[i].size < 6){
+ 	 		lotto[i].add( parseInt(Math.random()*45) + 1 );
+ 	 	}
+ 	}
+	for(let i = 0; i<10; i++){
+		sortLotto[i] = [];
+	 	for(let j of lotto[i]){
+	 		sortLotto[i].push(j);
+	 	}
+	}
+	function number(a,b){
+		if(a>b) return 1;
+		if(a==b) return 0;
+		if(a<b) return -1;
+	}
+ 	for(let i = 0 ; i < 10 ; i++){
+ 		sortLotto[i].sort(number);
+ 	}
+ 	for(let p of sortLotto){
+ 		document.write(p);
+ 		document.write("<br>");
+ 	}
+
+//-->
+</script>
+</head>
+<body>
+
+</body>
+</html>
