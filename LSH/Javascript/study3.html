@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title> Lotto </title>
+		<script type="text/javascript">
+			//<!--
+			document.write( "<h2> Random Lotto </h2>" );
+			/*
+				로또 조합( 1~45까지 숫자 6개 )을 랜덤으로 10개 추출
+				조합 내에서 중복을 100% 제거
+				오름차순 정렬해서 출력
+			*/
+			let m =[];
+			var same=0;
+			
+			for(let k=0;k<10; k++){
+				m=[];
+				document.write((k+1)+ "번째 랜덤으로 나온 숫자 : ");	
+
+				m = MakeRandom(m);
+		
+
+			    document.write("<br>");
+			    document.write((k+1)+"번째 중복 제거 후 정렬 : ");
+
+			    m.sort((a,b)=>a-b); //오름차순 정렬
+				PrintLotto(m);
+			    document.write("<br><br>");
+		}
+
+		function MakeRandom(m){
+			while(m.length!=6)
+			{
+				var num = parseInt(Math.random() * 45) +1;
+				for(let i=0; i < m.length ; i++){
+					if(m[i] == num)
+					 same++;
+				}
+
+				if(same == 0){ //중복이 없을 때만 대입
+					m[m.length] = num;
+				}
+				
+				same=0;
+				document.write(num + "\u00a0");
+			}
+			return m;
+		}
+		function PrintLotto(m){
+			for(let j =0; j<6;j++){
+				    document.write( m[j]+"\u00a0");
+			}
+		}
+			//-->
+		</script>
+	</head>
+	<body>	
+	</body>
+</html>
