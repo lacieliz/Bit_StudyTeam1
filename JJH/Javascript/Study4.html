@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>study</title>
+	<script type="text/javascript">
+		//<!--
+		// document.write()으로 처리
+		// 제출		button으로 처리
+		// 취소			reset 으로 처리
+		/* document.write("<h2> 구구단 </h2>");
+		
+		let problems = [];
+
+        function generateQuiz() {
+            document.write("<h2>구구단 문제</h2>");
+            document.write("<form id='quizForm'>");
+            document.write("<table border='1'>");
+
+            for (let i = 0; i < 10; i++) {
+                let num1 = Math.floor(Math.random() * 8) + 1; 
+                let num2 = Math.floor(Math.random() * 8) + 1;   // 1~9
+                problems.push({ num1, num2, answer: num1 * num2 });
+
+                document.write("<tr>");
+                document.write(`<th>${num1} * ${num2} = </th>`);
+                document.write(`<td><input type='text' id='answer${i}'></td>`);
+                document.write("</tr>");
+            }
+
+            document.write("<tr>");
+            document.write("<td colspan='2' style='text-align:center;'>");
+            document.write("<button type='button' onclick='checkAnswers()'>제출</button>");
+            document.write("<button type='button' onclick='resetQuiz()'>취소</button>");
+            document.write("</table>");
+            document.write("</form>");
+
+            document.write("<p>맞은 개수 : <span id='correctCount'>0</span></p>");
+            document.write("<p>점수 : <span id='score'>0</span></p>");
+        }
+
+        function checkAnswers() {
+            let correct = 0;
+
+            for (let i = 0; i < 10; i++) {
+                let userAnswer = document.getElementById(`answer${i}`).value;
+                if (parseInt(userAnswer) === problems[i].answer) {
+                    correct++;
+                }
+            }
+
+            document.getElementById("correctCount").innerText = correct;
+            document.getElementById("score").innerText = correct * 10; // 10점 만점
+        }
+
+        function resetQuiz() {
+            document.getElementById("quizForm").reset();
+            document.getElementById("correctCount").innerText = "0";
+            document.getElementById("score").innerText = "0";
+        }
+
+        window.onload = generateQuiz;
+		 */
+		 
+		// document.write()으로 처리
+			// 제출		button으로 처리
+			// 취소			reset 으로 처리
+			
+		 document.write("<h2> 구구단 </h2>");
+		 document.write("<table border = '1'>");
+		 
+		 let g = []; // 정답
+
+		 for(let i = 0; i<10; i++){ 
+			 document.write("<tr>");
+			 document.write("<td>");
+			 let num1 = parseInt(Math.random()*10 + 1);
+			 let num2 = parseInt(Math.random()*10 + 1);
+			 document.write( num1 + " * " + num2 + " = " );
+			 g[i] = num1*num2;
+			 document.write("</td>");
+			 
+			 document.write("<td>");
+			 document.write(" <input type='text' id = 'answer"+i+"' > ");
+			 document.write("</td>");
+			 document.write("</tr>");
+		 }
+		 document.write("<tr>");
+		 document.write("<td colspan = '2' align = 'center'><input type='button' value = '제출' id = 'btn'>");
+		 document.write("<input type='button' value = '취소' id = 'cancel'>");
+		 document.write("</td>");
+		 document.write("</tr>");
+		 document.write("</table>");
+		 document.write("맞은 개수 : ");
+		 document.write("<input type = 'text' id = 'ans' readonly><br>");
+		 document.write("점수 : ");
+		 document.write("<input type = 'text ' id = 'j' readonly><br>");
+		 
+		 window.onload = function() {				// 랜덩이 된 후에 실행
+			 	
+				let btn = document.getElementById( "btn" );
+				btn.onclick = function() {	
+					let count = 0;
+					for(let i = 0; i<10; i++){
+						let text = document.getElementById("answer"+i).value;	
+						if( g[i] == text ) count++;  
+					}
+					document.getElementById('ans').value = count;	
+					document.getElementById('j').value = count * 10;	
+				}
+				
+				let cancel = document.getElementById( "cancel" );
+				cancel.onclick = function() {
+					
+					for(let i = 0; i< 10; i++){
+						document.getElementById("answer"+i).value = null;	 
+					}
+				}
+		 }
+		 	
+		//-->
+	</script>
+</head>
+	<body>
+		
+	</body>
+</html>
