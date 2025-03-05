@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = "UTF-8">
+        <title>Study 4</title>
+        <style>
+
+        </style>
+        <script type ="text/javascript">
+            //document.write()로 처리
+            //취소는 Reset으로
+            //submit은 데이터를 가지고 다른 페이지로 넘어가는 것이므로 여기선 쓰면 안됨.
+            //제출은 각각 이벤트 처리 할 것.
+
+            //제출    Button으로 처리
+            //취소    Reset으로 처리
+            document.write("<h2> 구구단 문제 </h2>");
+            
+            //let tableID = document.getElementById("test");
+            document.write("<form id='tableform'>");
+            document.write("<table border='1' id='test'>");
+            let answer=[];
+            let right=[];
+           for(let i=0;i<10;i++){
+                let a = parseInt(Math.random()*10) +1;
+                let b = parseInt(Math.random()*10) +1;
+                answer[i] = a*b;
+                document.write("<tr>");
+                document.write("<td>"+a+" * "+b+" = </td> ");
+                document.write("<td><input type='test' id='user_answer"+i+"'></td>");   
+                document.write("</tr>");
+            }          
+            document.write("<tr><td align='center' colspan='2'>");
+            document.write("<input type='button' value ='제출' id='submit'>");
+            document.write("<input type='button' value = '취소' id='cancel'></td></tr>");
+            document.write("</table>");
+            document.write("</form>");
+            document.write("<br>");
+
+            window.onload=function(){
+                let submit = document.getElementById("submit");
+                submit.onclick=function(){
+                    let score_num = 0;
+                    let score = 0;
+
+                    for(let i=0;i<10;i++){
+                        right[i] = parseInt(document.getElementById("user_answer"+i).value);
+                        if(right[i]==answer[i]){
+                                score_num++;
+                                answer[i]=1;
+                        }
+                        else
+                         answer[i]=0;
+                    }
+                    score = score_num * 10;
+
+                    document.getElementById('score_num').value = score_num;
+                    document.getElementById('score').value = score;
+                    Circle(answer);
+                }
+                cancel.onclick=function(){
+                    document.getElementById('tableform').reset();
+                    right=[];
+                }
+            }
+            function Circle(m){
+                for(let i=0; i<10;i++){
+                    if(m[i]==1)
+                       document.getElementById("user_answer"+i).value += '  O';
+                    else
+                       document.getElementById("user_answer"+i).value += '  X';
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div>
+            맞은 개수 : <input type='text' id='score_num' readonly><br>
+            점수 : <input type='text' id='score' readonly><br>
+        </div>
+
+    </body>
+</html>
