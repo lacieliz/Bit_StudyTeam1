@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title> Fetch </title>
+		<script type="text/javascript">
+			// <!--
+			/*
+				[
+			  		{
+					   	"id": 1,											아이디
+					    "name": "Leanne Graham",							이름
+					    "username": "Bret",									사용자명
+					    "email": "Sincere@april.biz",						이메일
+					    "address": {										주소
+						    "street": "Kulas Light",						도로명
+						    "suite": "Apt. 556",							상세주소
+						    "city": "Gwenborough",							도시
+						    "zipcode": "92998-3874",						우편번호
+						    "geo": {										위치	
+						    	"lat": "-37.3159",							위도
+						    	"lng": "81.1496"							경도
+						    }
+					    },
+					    "phone": "1-770-736-8031 x56442",					전화번호
+					    "website": "hildegard.org",							웹사이트
+					    "company": {										회사
+					      	"name": "Romaguera-Crona",						회사명
+					      	"catchPhrase": "Multi-layered client-server neural-net",
+					      	"bs": "harness real-time e-markets"				업태 Business Status
+					   	 }
+					},
+					... ...
+					10명	
+				]			
+			*/
+			
+			window.addEventListener(
+					"DOMContentLoaded",
+					()=> {
+						// https://jsonplaceholder.typicode.com/posts			Mock server
+						/*
+									응답							응답
+									<-							<-
+					Client			->			Web Server		->		다른 Web Server
+									요청							요청
+								fetchjson.html				  CORS 에러		cors 해제
+						
+						*/
+						let t = document.getElementById("t");
+						fetch("https://jsonplaceholder.typicode.com/users")
+							.then(
+								(response) => response.json()			// 문자열 -> JSON
+							).then(
+								(data)=>{
+									if(!data){
+										t.innerHTML += `
+											<tr>
+												<th colspan="7">${error}</th>
+											</tr>
+										`;
+									}else{
+										data.forEach(
+											(item) => {
+												t.innerHTML += `
+													<tr>
+														<td>${item.id}</td>
+														<td>${item.name}</td>
+														<td>${item.email}</td>
+														<td>${item.address.city} ${item.address.street} ${item.address.suite} </td>
+														<td>${item.phone}</td>
+														<td>${item.company.name}</td>
+														<td>${item.company.bs}</td>
+													</tr>
+												`;
+											}
+										)
+									}
+								}		
+							
+							).catch(
+									(error) => {
+										t.innerHTML += `
+											<tr>
+												<th colspan="7">${error}</th>
+											</tr>
+										`;
+									}
+							);
+					}
+				);
+			//-->
+		</script>
+	</head>
+	<body>
+		<h2> Users </h2>
+		<!-- 
+			/users 를 fetch로 받아서 테이블로 출력
+			| 아이디 | 이름 | 이메일 | 주소(도시 도로명 상세주소 하나로) | 전화번호 | 회사명 | 업태 |
+		-->
+		<br>
+		<table border = "1">
+			<tr>
+				<th>아이디</th>
+				<th>이름</th>
+				<th>이메일</th>
+				<th>주소</th>
+				<th>전화번호</th>
+				<th>회사명</th>
+				<th>업태</th>
+			</tr>
+			<tbody id = "t">
+			</tbody>
+		</table>
+	</body>
+</html>
