@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script type="text/javascript">
+
+            window.addEventListener(
+                "DOMContentLoaded",()=>{
+                    let console = document.getElementById("console");
+                    let db;
+                    if(!db){
+                        const createDB = window.indexedDB.open("userDB",3);
+                        createDB.onerror = (event) =>{
+                            console.innerHTML = event.target.error;
+                        }
+                        createDB.onupgradeneeded = (event) =>{
+                            db = event.target.result;
+                            if(!db.objectStoreNames.contains("person")){
+                                let objectStore = db.createObjectStore("person", {keyPath:"id", autoIncrement: true});
+                                objectStore.createIndex("name","name",{unique:false});
+                                console.innerHTML= "person Store 생성 성공<br>";
+                            }
+                        }
+                        createDB.onsuccess = (event) =>{
+                            db = event.target.result;
+                            console.innerHTML = "userDB 생성 성공<br>";
+                        }
+            }
+                   
+               //저장
+               document.querySelector("input[name='btn_save']").addEventListener(
+                "click", (event)=>{
+                    let user_id = document.querySelector("input[name='user_id']");
+                    let user_name = document.querySelector("input[name='user_name']");
+                    let user_tel = document.querySelector("input[name='user_tel']");
+
+                    if(!user_id.value|| !user_name.value){
+                        console.innerHTML = "아이디와 이름을 입력해주세요<br>";
+                    }else{
+                        const person={
+                            id: user_id.value,
+                            name: user_name.value,
+                            tel: user_tel.value,
+                        };
+                        let personStore = db.transaction("person","readwrite").objectStore("person");
+                        let result = personStore.add(person);
+                        result.addEventListener(
+                            "success", (event)=>{
+                                console.innerHTML="회원정보를 저장했습니다.<br>";
+                            }
+                        );
+                        result.addEventListener(
+                            "error", (event)=>{
+                                console.innerHTML = event.target.error;
+                            }
+                        );
+                    }
+                });
+                //보기, 검색
+               document.querySelector("input[name='btn_retrieve']").addEventListener(
+                "click", (event)=>{
+                    let user_id = document.querySelector("input[name='user_id']");
+                    let user_name = document.querySelector("input[name='user_name']");
+                    let user_tel = document.querySelector("input[name='user_tel']");
+                    
+                    let print_table = document.getElementById("print_table");
+                    let personStore = db.transaction("person","readwrite").objectStore("person");
+
+                    if(user_id.value){ //아이디 입력이 들어온 경우
+                        let data = personStore.get(user_id.value);
+                        data.addEventListener(
+                            "success",(event)=>{
+                                if(data.result){
+                                    print_table.innerHTML = `
+                                        <tr>
+                                            <th> 아이디 </th>
+                                            <th> 이름 </th>
+                                            <th> 전화번호 </th>
+                                        </tr>
+                                        <tr align='center'>
+                                            <td> ${data.result.id}</td>
+                                            <td> ${data.result.name}</td>
+                                            <td> ${data.result.tel}</td>
+                                        </tr>
+                                    `;
+                                }
+                                else{
+                                    print_table="";
+                                    console.innerHTML="입력하신 아이디가 없습니다.<br>";
+                                }
+                            });
+                        data.addEventListener(
+                            "error", (event)=>{
+                                console.innerHTML = event.target.error;
+                            });
+                    }
+                    else if(user_name.value){ //DB에 아이디는 없지만 이름이 있을경우
+                        let index = personStore.index("name");
+                        let datas = index.getAll(user_name.value);//이름은 여러개일 수 있으므로
+
+                        datas.addEventListener(
+                            "success",(event)=>{
+                                if(datas.result != ""){
+                                    print_table.innerHTML=`
+                                    <tr>
+                                        <th> 아이디 </th>
+                                        <th> 이름 </th>
+                                        <th> 전화번호 </th>
+                                    </tr>                                       
+                                    `;
+                                    for(let i=0; i<datas.result.length; i++){
+                                        print_table.innerHTML+=`
+                                          <tr>
+                                             <td>${datas.result[i].id}</td>
+                                             <td>${datas.result[i].name}</td>
+                                             <td>${datas.result[i].tel}</td>
+                                          </tr>
+                                        `;
+                                    }
+                                }
+                                else{
+                                    print_table.innerHTML="";
+                                    console.innerHTML="입력하신 이름이 없습니다.<br>"
+                                }
+                            });
+                        datas.addEventListener(
+                            "error",(event)=>{
+                                console.innerHTML=event.target.error;
+                            });
+                    }else if(user_tel.value){ //아이디와 이름이 없고 전화번호만 있는 경우
+                        print_table.innerHTML="";
+                        console.innerHTML = "찾을 아이디나 이름을 입력하세요<br>";
+                    }else{//데이터 입력이 모두 없는 경우에는 전체 디비 출력
+                        let cursor = personStore.openCursor();
+
+                        print_table.innerHTML=`
+                                <tr>
+                                    <th> 아이디 </th>
+                                    <th> 이름 </th>
+                                    <th> 전화번호 </th>
+                                </tr>
+                        `;
+                        cursor.addEventListener(
+                            "success",(event)=>{
+                                let data = cursor.result;
+                                if(data){
+                                    print_table.innerHTML+=`
+                                        <tr>
+                                            <td> ${data.value.id}</td>
+                                            <td> ${data.value.name}</td>
+                                            <td> ${data.value.tel}</td>
+                                        </tr>
+                                    `;
+                                    data.continue();
+                                }
+                            });
+                        cursor.addEventListener(
+                            "error",(event)=>{
+                                console.innerHTML = event.target.error;
+                            });
+                    }
+                });
+
+                document.querySelector("input[name='btn_delete']").addEventListener(
+                    "click", (event)=>{
+                        let user_id=document.querySelector("input[name='user_id']");
+                        let personStore = db.transaction("person","readwrite").objectStore("person");
+                        
+                        if(!user_id.value){
+                            print_table.innerHTML="";
+                            console.innerHTML="삭제할 아이디를 입력하세요";
+                        }
+                        else{ //아이디 입력은 했는데
+                            let data = personStore.get(user_id.value);
+                            data.addEventListener(
+                                "success",(event)=>{
+                                    if(data.result){ //디비에 그 아이디가 실제로 있을 때
+                                        personStore.delete(user_id.value);
+
+                                        print_table.innerHTML="";
+                                        console.innerHTML=`${user_id.value} 삭제 성공하였습니다.`;
+                                    }
+                                    else{ //디비게 그 아이디가 없을 때
+                                        print_table.innerHTML="";
+                                        console.innerHTML="입력하신 아이디가 없습니다.";
+                                    }
+                                }
+                            );
+                            data.addEventListener(
+                                "error",(event)=>{
+                                    print_table.innerHTML="";
+                                    console.innerHTML=event.target.error;
+                             });  
+                        }
+                }); 
+                
+                document.querySelector("input[name='btn_modify']").addEventListener(
+                    "click", (event)=>{
+                        let user_id = document.querySelector("input[name='user_id']");
+                        let personStore = db.transaction("person","readwrite").objectStore("person");
+
+                        if(!user_id.value){
+                            print_table.innerHTML = "";
+                            console.innerHTML="수정할 아이디를 입력하세요.";
+                        }
+                        else{
+                            let data = personStore.get(user_id.value);
+                            data.addEventListener(
+                                "success",(event) => {
+                                    if(data.result){
+                                        let modify_div = document.getElementById("modify");
+                                        let modify_table = document.getElementById("modify_table");
+                                        modify_div.style.display="block";
+                                        modify_table.innerHTML=`
+                                                                <tr>
+                                                                  <th> 아이디 </th>
+                                                                  <th> 이름 </th>
+                                                                  <th> 전화번호 </th>
+                                                                </tr>
+                                          `;
+                                        modify_table.innerHTML+=` <tr>
+                                                                  <td><input type="text" value="${data.result.id}" id="modify_id" readonly></td>
+                                                                  <td><input type="text" value="${data.result.name}" placeholder="${data.result.name}" id="modify_name"></td>
+                                                                  <td><input type="text" value="${data.result.tel}" placeholder="${data.result.tel}" id="modify_tel"></td>
+                                                                  </tr>
+                                        `;
+                                    }else{
+                                        print_table.innerHTML = "";
+                                        console.innerHTML="입력하신 아이디가 없습니다.";
+                                    }
+
+                                });
+                        } 
+                });
+
+                document.querySelector("input[name='btn_modify2']").addEventListener(
+                    "click", (event)=>{
+                        let user_id = document.getElementById("modify_id");
+                        let user_name = document.getElementById("modify_name");
+                        let user_tel = document.getElementById("modify_tel");
+
+                        if(!user_name){
+                            print_table.innerHTML="";
+                            console.innerHTML="수정하실 이름을 입력해주세요.";
+                        }
+                        else{
+                            let personStore = db.transaction("person","readwrite").objectStore("person");
+                            let data = personStore.get(user_id.value)
+
+                            data.addEventListener(
+                                "success",(event)=>{
+                                    personStore.put({
+                                                      id: user_id.value,
+                                                      name: user_name.value,
+                                                      tel: user_tel.value,});
+                            print_table.innerHTML="";
+                            console.innerHTML="회원정보를 수정했습니다.<br>";
+                            });
+
+                            data.addEventListener(
+                                "error",(event)=>{
+                                    print_table.innerHTML="";
+                                    console.innerHTML=event.target.error;
+                                });
+                        }   
+                    });
+          
+            });
+        </script>
+    </head>
+    <body>
+        <h3> IndexedDB </h3>
+        <table border="1">
+            <tr>
+                <td align="center">
+                    아이디
+                </td>
+                <td>
+                    <input type="text"  placeholder="필수" name="user_id">
+                </td>
+            </tr>
+            <tr>
+                <td align="center">
+                    이름
+                </td>
+                <td>
+                    <input type="text" placeholder="필수" name="user_name">
+                </td>
+            </tr>
+            <tr>
+                <td align="center">
+                    전화번호
+                </td>
+                <td>
+                    <input type="text" name="user_tel">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                <input type="button" value="저장" name="btn_save">
+                <input type="button" value="보기" name="btn_retrieve">
+                <input type="button" value="수정" name="btn_modify">
+                <input type="button" value="삭제" name="btn_delete">
+                </td>
+            </tr>
+        </table>
+        <br><br>
+        <div id="modify" style="display:none;">	<!-- 수정할 데이터를 입력받을 폼 -->
+            <table border="1">
+                <tbody id="modify_table">
+                </tbody>
+            </table>
+            <input type="button" value="수정" name="btn_modify2">		
+		</div>	
+        <br><br>
+        <table border="1">
+            <tbody id="print_table">
+            </tbody>
+        </table>
+        <div id = "console">
+        </div>
+    </body>
+</html>
