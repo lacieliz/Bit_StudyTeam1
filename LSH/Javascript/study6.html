@@ -253,6 +253,8 @@
                                                       id: user_id.value,
                                                       name: user_name.value,
                                                       tel: user_tel.value,});
+                            
+                            document.getElementById("modify").style.display="none";
                             print_table.innerHTML="";
                             console.innerHTML="회원정보를 수정했습니다.<br>";
                             });
@@ -264,7 +266,13 @@
                                 });
                         }   
                     });
-          
+                document.querySelector("input[name='btn_cancel']").addEventListener(
+                    "click", (event)=>{
+                        document.getElementById("modify").style.display="none";
+
+                        print_table.innerHTML="";
+                        console.innerHTML="회원정보 수정을 취소했습니다.";
+                    });
             });
         </script>
     </head>
@@ -310,7 +318,8 @@
                 <tbody id="modify_table">
                 </tbody>
             </table>
-            <input type="button" value="수정" name="btn_modify2">		
+            <input type="button" value="수정" name="btn_modify2">
+            <input type="button" value="취소" name="btn_cancel">		
 		</div>	
         <br><br>
         <table border="1">
